@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        .calculator {
+            max-width: 300px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .result {
+            font-size: 24px;
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 5px;
+        }
+
+        button {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button.operator {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button.operator:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="result" id="result">0</div>
+        <button onclick="appendNumber('7')">7</button>
+        <button onclick="appendNumber('8')">8</button>
+        <button onclick="appendNumber('9')">9</button>
+        <button onclick="setOperation('+')" class="operator">+</button>
+        <br>
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
+        <button onclick="setOperation('-')" class="operator">-</button>
+        <br>
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button onclick="setOperation('*')" class="operator">*</button>
+        <br>
+        <button onclick="appendNumber('0')">0</button>
+        <button onclick="clearResult()">C</button>
+        <button onclick="calculateResult()" class="operator">=</button>
+        <button onclick="setOperation('/')" class="operator">/</button>
+    </div>
+
+    <script>
+        var resultElement = document.getElementById('result');
+        var currentResult = '0';
+        var currentOperation = '';
+        var pendingOperation = '';
+        var isNewNumber = true;
+
+        function appendNumber(number) {
+            if (isNewNumber) {
+                currentResult = number;
+                isNewNumber = false;
+            } else {
+                currentResult += number;
+            }
+            updateResult();
+        }
+
+        function setOperation(operation) {
+            if (currentOperation !== '') {
+                calculateResult();
+            }
+            currentOperation = operation;
+            pendingOperation = currentResult;
+            isNewNumber = true;
+        }
+
+        function calculateResult() {
+            switch (currentOperation) {
+                case '+':
+                    currentResult = (parseFloat(pendingOperation) + parseFloat(currentResult)).toString();
+                    break;
+                case '-':
+                    currentResult = (parseFloat(pendingOperation) - parseFloat(currentResult)).toString();
+                    break;
+                case '*':
+                    currentResult = (parseFloat(pendingOperation) * parseFloat(currentResult)).toString();
+                    break;
+                case '/':
+                    currentResult = (parseFloat(pendingOperation) / parseFloat(currentResult)).toString();
+                    break;
+            }
+            currentOperation = '';
+            pendingOperation = '';
+            isNewNumber = true;
+            updateResult();
+        }
+
+        function clearResult() {
+            currentResult = '0';
+            currentOperation = '';
+            pendingOperation = '';
+            isNewNumber = true;
+            updateResult();
+        }
+
+        function updateResult() {
+            resultElement.textContent = currentResult;
+        }
+    </script>
+</body>
+</html>
